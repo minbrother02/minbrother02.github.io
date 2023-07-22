@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>first on Parker Blog</title>
-    <link>https://parker1609.github.io/tags/first/</link>
+    <link>https://minbrother02.github.io/tags/first/</link>
     <description>Recent content in first on Parker Blog</description>
     <image>
       <title>Parker Blog</title>
-      <url>https://parker1609.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
-      <link>https://parker1609.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+      <url>https://minbrother02.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://minbrother02.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 22 Jul 2023 23:08:15 +0900</lastBuildDate><atom:link href="https://parker1609.github.io/tags/first/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 22 Jul 2023 23:08:15 +0900</lastBuildDate><atom:link href="https://minbrother02.github.io/tags/first/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Test</title>
-      <link>https://parker1609.github.io/post/test/</link>
+      <link>https://minbrother02.github.io/post/test/</link>
       <pubDate>Sat, 22 Jul 2023 23:08:15 +0900</pubDate>
       
-      <guid>https://parker1609.github.io/post/test/</guid>
+      <guid>https://minbrother02.github.io/post/test/</guid>
       <description></description>
     </item>
     
