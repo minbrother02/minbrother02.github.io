@@ -10,16 +10,6 @@
       <link>https://minbrother02.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Sat, 22 Jul 2023 23:08:15 +0900</lastBuildDate><atom:link href="https://minbrother02.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Test</title>
-      <link>https://minbrother02.github.io/post/test/</link>
-      <pubDate>Sat, 22 Jul 2023 23:08:15 +0900</pubDate>
-      
-      <guid>https://minbrother02.github.io/post/test/</guid>
-      <description></description>
-    </item>
-    
+    <language>en</language><atom:link href="https://minbrother02.github.io/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
