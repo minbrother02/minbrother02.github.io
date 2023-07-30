@@ -82,11 +82,21 @@
             align-items: center;
             height: 300px;
         }
+
         .timer {
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
+        .pomodoro-name {
+
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
         .timer>span {
             font-size: 100px;
         }
@@ -96,18 +106,24 @@
         }
 
         .setting-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 30%;
+            height: 100%;
         }
 
         input {
             width: 50px;
         }
-        .btn-box{
+
+        .btn-box {
             display: flex;
             justify-content: center;
             align-items: center;
 
         }
+
         .btn-box button {
             appearance: none;
             background-color: #000000;
@@ -197,7 +213,7 @@
                 <div class="timer">
                     <span id="min">00</span>
                     <span>:</span>
-                    <span id="sec">03</span>
+                    <span id="sec">00</span>
                 </div>
                 <div class="btn-box">
                     <button id="startBtn">START</button>
@@ -207,23 +223,29 @@
             </div>
 
             <div class="setting-box">
-                <div class="pomodoro-time">
-                    <h3>
-                        <input type="text" id="pomodoroTime" value="25">
-                        <label for="pomodoroTime">집중시간</label>
-                    </h3>
-                </div>
-                <div class="short-break-time">
-                    <h3>
-                        <input type="text" id="sbTime" value="5">
-                        <label for="sbTime">짧은 휴식시간</label>
-                    </h3>
-                </div>
-                <div class="long-break-time">
-                    <h3>
-                        <input type="text" id="lbTime" value="15">
-                        <label for="lbTime">긴 휴식시간</label>
-                    </h3>
+                <div>
+                    <div class="pomodoro-time">
+                        <h3>
+                            <input type="text" id="pomodoroTime" value="01">
+                            <label for="pomodoroTime">집중시간</label>
+                        </h3>
+                    </div>
+                    <div class="short-break-time">
+                        <h3>
+                            <input type="text" id="shortBreakTime" value="01">
+                            <label for="sbTime">짧은 휴식시간</label>
+                        </h3>
+                    </div>
+                    <div class="long-break-time">
+                        <h3>
+                            <input type="text" id="longBreakTime" value="01">
+                            <label for="lbTime">긴 휴식시간</label>
+                        </h3>
+                    </div>
+                    <div class="pomodoro-name">
+                        <div id="tiemCount">0</div>
+                        <div id="pomodoroName">집중시간</div>
+                    </div>
                 </div>
             </div>
             <audio src="beep.mp3" id="beep"></audio>
@@ -243,17 +265,29 @@
     <script>document.getElementById("theme-toggle").addEventListener("click", () => { document.body.className.includes("dark") ? (document.body.classList.remove("dark"), localStorage.setItem("pref-theme", "light")) : (document.body.classList.add("dark"), localStorage.setItem("pref-theme", "dark")) })</script>
     <script>
 
+        let pomodoroTime = document.querySelector("#pomodoroTime");
+        let shortBreakTime = document.querySelector("#shortBreakTime");
+        let longBreakTime = document.querySelector("#longBreakTime");
         let secDoc = document.querySelector("#sec");
         let minDoc = document.querySelector("#min");
         let startBtn = document.querySelector("#startBtn");
         // let pauseBtn = document.querySelector("#pauseBtn");
         let resetBtn = document.querySelector("#resetBtn");
+        let timeCount = document.querySelector("#tiemCount");
+        let pomodoroName = document.querySelector("#pomodoroName");
+
+        minDoc.innerText = pomodoroTime.value;
 
         let min = minDoc.innerText;
         let sec = secDoc.innerText;
+
         let minTmp = min;
         let secTmp = sec;
+
         let isStart = false;
+        let isShortBreak = false;
+        let pomodoroCount = 0;
+        let longBreakCount = 1;
         let time = parseInt(min) * 60 + parseInt(sec);
 
         let batch;
@@ -266,14 +300,16 @@
                         --time;
                         sec = Math.floor(time % 60);
                         min = Math.floor(time / 60);
-
+                        minDoc.innerText = min > 9 ? min : "0" + min;
+                        secDoc.innerText = sec > 9 ? sec : "0" + sec
                     }
                     if (sec < 1) {
-                        Beep();
+                        endAudio();
                         clearInterval(batch);
+                        breakTime();
                     }
-                    minDoc.innerText = min > 9 ? min : "0" + min;
-                    secDoc.innerText = sec > 9 ? sec : "0" + sec;
+
+                    
                 }, 1000);
                 isStart = true;
             }
@@ -290,11 +326,57 @@
             minDoc.innerText = minTmp;
             time = parseInt(minTmp) * 60 + parseInt(secTmp);
         });
-        function Beep(){
-                const audio = document.querySelector("#beep");
-                beep.play();
+        function endAudio() {
+            const audio = document.querySelector("#beep");
+            beep.play();
         }
-     
+        function breakTime() {
+            if (longBreakCount < 4) {
+                if (!isShortBreak) {
+                   
+                    
+                    minDoc.innerText = shortBreakTime.value;
+
+                    min = minDoc.innerText;
+
+
+                    minTmp = min;
+
+                    isStart = false;
+                    isShortBreak = true;
+                    
+                   
+                    pomodoroName.innerText = "짧은 휴식시간";
+                    time = parseInt(min) * 60 + parseInt(sec);
+                    
+                } else if (isShortBreak) {
+                    pomodoroCount++;
+                    longBreakCount++;
+                    minDoc.innerText = pomodoroTime.value;
+                    timeCount.innerText = pomodoroCount;
+                    min = minDoc.innerText;
+
+
+                    minTmp = min;
+                    isStart = false;
+                    isShortBreak = false;
+                    pomodoroName.innerText = "집중시간";
+                    time = parseInt(min) * 60 + parseInt(sec);
+                }
+            } else {
+               
+                minDoc.innerText = longBreakTime.value;
+                min = minDoc.innerText;
+
+
+                minTmp = min;
+                isStart = false;
+                longBreakCount = 1;
+                pomodoroName.innerText = "긴 휴식시간";
+                time = parseInt(min) * 60 + parseInt(sec);
+            }
+        }
+
     </script>
 </body>
 
