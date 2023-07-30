@@ -55,6 +55,10 @@
                                         border-color: var(--theme)
                                 }
                         }
+                        .timer > span{
+                                font-size: ;
+                        }
+
                 </style>
         </noscript>
         <script
@@ -102,13 +106,13 @@
                                                 </svg></button></div>
                         </div>
                         <ul id=menu>
-                                <li><a href=https://minbrother02.github.io/categories/ title=categories><span
-                                                        >Categories</span></a></li>
+                                <li><a href=https://minbrother02.github.io/categories/
+                                                title=categories><span>Categories</span></a></li>
                                 <li><a href=https://minbrother02.github.io/tags/ title=tags><span>Tags</span></a></li>
                                 <li><a href=https://minbrother02.github.io/about/ title="About Me"><span>About
                                                         Me</span></a></li>
-                                <li><a href=https://minbrother02.github.io/pomodoro/
-                                                title="Pomodoro Timer" class=active><span>Pomodoro Timer</span></a></li>
+                                <li><a href=https://minbrother02.github.io/pomodoro/ title="Pomodoro Timer"
+                                                class=active><span>Pomodoro Timer</span></a></li>
                         </ul>
                 </nav>
         </header>
@@ -117,7 +121,32 @@
                         <h1>Pomodoro Timer</h1>
                 </header>
                 <ul class=terms-tags>
-                        asdfasdf
+                        <div class="box"> 
+                                <div class="timer-box">
+                                        <div class="timer">
+                                                <span id="min">25</span>
+                                                <span>:</span>
+                                                <span id="sec">00</span>
+                                        </div>
+                                        <div class="btn-box">
+                                                <button id="start-btn">START</button>
+                                                <button id="pause-btn">PAUSE</button>
+                                                <button id="reset-btn">RESET</button>
+                                        </div>
+                                </div>
+                                
+                                <div class="setting-box">
+                                        <div class="pomodoro-time">
+                                                <h3>25</h3>
+                                        </div>
+                                        <div class="short-break-time">
+                                                <h3>5</h3>
+                                        </div>
+                                        <div class="long-break-time">
+                                                <h3>15</h3>
+                                        </div>
+                                </div>
+                        </div>
                 </ul>
         </main>
         <footer class=footer><span>&copy; 2023 <a href=https://minbrother02.github.io />Min</a></span>
@@ -132,6 +161,56 @@
         <script>let menu = document.getElementById("menu"); menu && (menu.scrollLeft = localStorage.getItem("menu-scroll-position"), menu.onscroll = function () { localStorage.setItem("menu-scroll-position", menu.scrollLeft) }), document.querySelectorAll('a[href^="#"]').forEach(e => { e.addEventListener("click", function (e) { e.preventDefault(); var t = this.getAttribute("href").substr(1); window.matchMedia("(prefers-reduced-motion: reduce)").matches ? document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView() : document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({ behavior: "smooth" }), t === "top" ? history.replaceState(null, null, " ") : history.pushState(null, null, `#${t}`) }) })</script>
         <script>var mybutton = document.getElementById("top-link"); window.onscroll = function () { document.body.scrollTop > 800 || document.documentElement.scrollTop > 800 ? (mybutton.style.visibility = "visible", mybutton.style.opacity = "1") : (mybutton.style.visibility = "hidden", mybutton.style.opacity = "0") }</script>
         <script>document.getElementById("theme-toggle").addEventListener("click", () => { document.body.className.includes("dark") ? (document.body.classList.remove("dark"), localStorage.setItem("pref-theme", "light")) : (document.body.classList.add("dark"), localStorage.setItem("pref-theme", "dark")) })</script>
+        <script>
+
+                let secDoc = document.querySelector("#sec");
+                let minDoc = document.querySelector("#min");
+                let startBtn = document.querySelector("#start-btn");
+                let pauseBtn = document.querySelector("#pause-btn");
+                let resetBtn = document.querySelector("#reset-btn");
+
+                let min = minDoc.innerText;
+                let sec = secDoc.innerText;
+                let minTmp = min;
+                let secTmp = sec;
+                let isStart = false;
+                let time = parseInt(min) * 60 + parseInt(sec);
+
+                let batch;
+
+                startBtn.addEventListener("click", () => {
+
+                        if (isStart == false) {
+                                batch = setInterval(() => {
+                                        if (min >= 0) {
+                                                --time;
+                                                sec = Math.floor(time % 60);
+                                                min = Math.floor(time / 60);
+
+                                        }
+                                        if (sec < 1) {
+                                                clearInterval(batch);
+                                        }
+                                        minDoc.innerText = min > 9 ? min : "0" + min;
+                                        secDoc.innerText = sec > 9 ? sec : "0" + sec;
+                                }, 1000);
+                                isStart = true;
+                        }
+                        
+                });
+                pauseBtn.addEventListener("click", () => {
+                        clearInterval(batch);
+                        isStart = false;
+                });
+                resetBtn.addEventListener("click", () => {
+                        clearInterval(batch);
+                        isStart = false;
+                        secDoc.innerText = secTmp;
+                        minDoc.innerText = minTmp;
+                        time = parseInt(minTmp) * 60 + parseInt(secTmp);
+                });
+
+        </script>
 </body>
 
 </html>
