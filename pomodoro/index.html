@@ -291,8 +291,8 @@
             time = parseInt(minTmp) * 60 + parseInt(secTmp);
         });
         function Beep(){
-            let beep = new Audio("beep.mp3");
-            beep.play();
+                const audio = document.querySelector("#beep");
+                beep.play();
         }
      
     </script>
