@@ -226,7 +226,7 @@
                 <div>
                     <div class="pomodoro-time">
                         <h3>
-                            <input type="text" id="pomodoroTime" value="25">
+                            <input type="text" id="pomodoroTime" value="02">
                             <label for="pomodoroTime">집중시간</label>
                         </h3>
                     </div>
@@ -265,54 +265,56 @@
     <script>document.getElementById("theme-toggle").addEventListener("click", () => { document.body.className.includes("dark") ? (document.body.classList.remove("dark"), localStorage.setItem("pref-theme", "light")) : (document.body.classList.add("dark"), localStorage.setItem("pref-theme", "dark")) })</script>
     <script>
 
-        let pomodoroTime = document.querySelector("#pomodoroTime");
-        let shortBreakTime = document.querySelector("#shortBreakTime");
-        let longBreakTime = document.querySelector("#longBreakTime");
-        let secDoc = document.querySelector("#sec");
-        let minDoc = document.querySelector("#min");
-        let startBtn = document.querySelector("#startBtn");
+        let pomodoroTime = document.querySelector("#pomodoroTime"); // 집중시간
+        let shortBreakTime = document.querySelector("#shortBreakTime"); // 짧은 휴식 시간
+        let longBreakTime = document.querySelector("#longBreakTime"); // 긴 휴식 시간
+         
+        let minDoc = document.querySelector("#min"); // 분 
+        let secDoc = document.querySelector("#sec"); // 초
+        
+        let startBtn = document.querySelector("#startBtn"); // 시작버튼
         // let pauseBtn = document.querySelector("#pauseBtn");
-        let resetBtn = document.querySelector("#resetBtn");
-        let timeCount = document.querySelector("#tiemCount");
-        let pomodoroName = document.querySelector("#pomodoroName");
+        let resetBtn = document.querySelector("#resetBtn"); // 초기화 버튼
+        let timeCount = document.querySelector("#tiemCount"); // 뽀모도로 카운트
+        let pomodoroName = document.querySelector("#pomodoroName"); // 현재 시간 이름
 
-        minDoc.innerText = pomodoroTime.value;
+        minDoc.innerText = pomodoroTime.value; // 입력한 집중시간 가져오기
 
-        let min = minDoc.innerText;
-        let sec = secDoc.innerText;
+        let min = minDoc.innerText; // 분에 기존 입력된 값 가져오기
+        let sec = secDoc.innerText; // 초에 기존 입력된 값 가져오기
 
-        let minTmp = min;
-        let secTmp = sec;
+        let minTmp = min; // 분 임시저장
+        let secTmp = sec; // 초 임시저장
 
-        let isStart = false;
-        let isShortBreak = false;
-        let pomodoroCount = 0;
-        let longBreakCount = 1;
-        let time = parseInt(min) * 60 + parseInt(sec);
+        let isStart = false; // 타이머 시작여부
+        let isShortBreak = false;  // 짧은 휴식시간 시작 여부
+        let pomodoroCount = 0; //  뽀모도로 카운트
+        let longBreakCount = 1; // 긴 휴식시간 
+        let time = parseInt(min) * 60 + parseInt(sec); // 입력된 초
 
-        let batch;
+        let batch; // 배치
 
         startBtn.addEventListener("click", () => {
 
-            if (isStart == false) {
+            if (isStart == false) { // 타이머가 시작하지않은경우
                 batch = setInterval(() => {
-                    if (min >= 0) {
+                    if (min >= 0) { // 분이 있을경우 여기서는 초를 고려하지않음 
                         --time;
                         sec = Math.floor(time % 60);
                         min = Math.floor(time / 60);
                         minDoc.innerText = min > 9 ? min : "0" + min;
                         secDoc.innerText = sec > 9 ? sec : "0" + sec
                     }
-                    if (time < 1) {
+                    if (time < 1) { // 초가 0이하이면 종료되면서 소리울림
                       
                         endAudio();
                         clearInterval(batch);
-                        breakTime();
+                        timeChange();
                     }
 
                     
                 }, 1000);
-                isStart = true;
+                isStart = true; // 타이머가 시작됨 
             }
 
         });
@@ -320,27 +322,30 @@
         //     clearInterval(batch);
         //     isStart = false;
         // });
+        
+        // 리셋버튼 클릭시
         resetBtn.addEventListener("click", () => {
             clearInterval(batch);
-            isStart = false;
-            secDoc.innerText = secTmp;
-            minDoc.innerText = minTmp;
-            time = parseInt(minTmp) * 60 + parseInt(secTmp);
+            isStart = false; // 시작중 아님
+            
+            minDoc.innerText = minTmp; // 분 임시저장값 복구
+            secDoc.innerText = secTmp; // 초 임시저장값 복구
+            time = parseInt(minTmp) * 60 + parseInt(secTmp); // 초 다시계산
         });
+
+        
         function endAudio() {
             const audio = document.querySelector("#beep");
             beep.play();
         }
-        function breakTime() {
-            if (longBreakCount < 4) {
-                if (!isShortBreak) {
-                   
-                    
+
+        // 집중 시간 짧은 휴식시간 긴 휴식시간 값변경
+        function timeChange() {
+            if (longBreakCount < 4) { // 긴휴식시간이 4번 이하이면
+                if (!isShortBreak) { // 짧은 휴식시간이 아니면
                     minDoc.innerText = shortBreakTime.value;
 
                     min = minDoc.innerText;
-
-
                     minTmp = min;
 
                     isStart = false;
@@ -350,9 +355,10 @@
                     pomodoroName.innerText = "짧은 휴식시간";
                     time = parseInt(min) * 60 + parseInt(sec);
                     
-                } else if (isShortBreak) {
+                } else if (isShortBreak) { // 짧은 휴식시간 인경우
                     pomodoroCount++;
                     longBreakCount++;
+                    
                     minDoc.innerText = pomodoroTime.value;
                     timeCount.innerText = pomodoroCount;
                     min = minDoc.innerText;
